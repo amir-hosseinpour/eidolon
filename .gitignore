@@ -1,0 +1,89 @@
+# ── Secrets & Credentials ──────────────────────────────────────
+*.env
+.env*
+!.env.example
+secrets/
+credentials/
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+*.gpg
+*.asc
+!*.pub.asc
+authorized_keys
+known_hosts
+*.luks-key
+
+# ── Engagement Data (MUST NEVER be committed) ─────────────────
+engagements/
+client-data/
+scope-tokens/
+potfiles/
+hashes/
+*.hash
+*.pot
+loot/
+wordlists/
+captures/
+*.pcap
+*.pcapng
+
+# ── Local Development ─────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+!.vscode/settings.example.json
+
+# ── Language-specific ─────────────────────────────────────────
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+*.tsbuildinfo
+
+# Go
+bin/
+*.test
+coverage.out
+
+# Rust
+target/
+
+# ── Logs ──────────────────────────────────────────────────────
+*.log
+logs/
+!docs/**/*.log.example
+
+# ── OS / Tooling ──────────────────────────────────────────────
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+!*.tfvars.example
+.ansible/
+*.retry
+
+# ── Claude Code state ─────────────────────────────────────────
+.claude/local/
+CLAUDE.local.md

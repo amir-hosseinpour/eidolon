@@ -1,0 +1,97 @@
+[project]
+name = "eidolon"
+version = "0.1.0.dev0"
+description = "Self hosted, open source framework for offensive security work"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+authors = [
+    { name = "Amir Hosseinpour" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+]
+
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.27.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "httpx>=0.26.0",
+    "litellm>=1.30.0",
+    "sqlalchemy>=2.0.0",
+    "asyncpg>=0.29.0",
+    "click>=8.1.0",
+    "rich>=13.7.0",
+    "structlog>=24.1.0",
+    "pyjwt[crypto]>=2.8.0",
+    "docker>=7.1.0",
+    "proxmoxer>=2.0.1",
+    "requests>=2.31.0",
+    "pyyaml>=6.0.1",
+    "mcp>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.3.0",
+    "mypy>=1.8.0",
+    "httpx>=0.26.0",
+    "types-pyyaml>=6.0.0",
+]
+
+[project.scripts]
+eidolon = "eidolon.cli.main:main"
+eidolon-agent = "eidolon.vm_agent.main:cli_main"
+eidolon-mcp = "eidolon.mcp_servers.server:cli_main"
+
+[project.urls]
+Homepage = "https://github.com/eidolon/eidolon"
+Documentation = "https://github.com/eidolon/eidolon/tree/main/docs"
+Issues = "https://github.com/eidolon/eidolon/issues"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["eidolon*"]
+
+[tool.setuptools.package-data]
+"eidolon.templates" = ["**/*.yaml", "**/*.md", "**/*.sh", "**/.gitkeep"]
+"eidolon.skills_pack" = ["**/*.md"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "B", "UP", "S", "T20"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]
+"eidolon/orchestrator/lib/secrets.py" = ["S603", "S607"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "docker: requires a running Docker daemon (set EIDOLON_DOCKER_TESTS=1 to enable)",
+    "proxmox: requires a reachable Proxmox host (set EIDOLON_PROXMOX_TESTS=1 to enable)",
+]

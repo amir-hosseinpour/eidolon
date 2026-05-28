@@ -1,0 +1,103 @@
+direction: down
+
+title: {
+  label: "Eidolon, session lifecycle"
+  near: top-center
+  shape: text
+  style.font-size: 26
+  style.bold: true
+}
+
+start: 1. Start {
+  shape: rectangle
+  style: {
+    fill: "#D1FAE5"
+    stroke: "#065F46"
+    bold: true
+  }
+  cmd: eidolon session start\n--scope scope.json {
+    shape: rectangle
+    style.fill: "#F0FDF4"
+  }
+  phases: |md
+    1. Validate scope schema
+    2. Generate session ID
+    3. Provision sandbox workspace
+    4. Load egress filter
+    5. Issue scope token (HMAC)
+    6. Emit session_opened
+|
+}
+
+operate: 2. Operate {
+  shape: rectangle
+  style: {
+    fill: "#DBEAFE"
+    stroke: "#1E40AF"
+    bold: true
+  }
+  actions: |md
+    - Claude Code subagents
+    - run scoped tools via
+    - orchestrator.
+
+    - Every call carries
+    - scope-token HMAC.
+
+    - Every action logged
+    - to Logger VM.
+|
+  gates: Three-tier gate {
+    shape: rectangle
+    style.fill: "#EFF6FF"
+    autonomous: autonomous {style.fill: "#BBF7D0"}
+    confirm: confirm {style.fill: "#FDE68A"}
+    prohibited: prohibited {style.fill: "#FECACA"}
+  }
+}
+
+close: 3. Close {
+  shape: rectangle
+  style: {
+    fill: "#FEE2E2"
+    stroke: "#991B1B"
+    bold: true
+  }
+  cmd: eidolon session close\n--session-id SESS-... {
+    shape: rectangle
+    style.fill: "#FEF2F2"
+  }
+  phases: |md
+    1. Archive sandbox workspace
+    2. Tear down workspace volume
+    3. Pull session log excerpts
+    4. Package session archive
+    5. Emit session_closed
+|
+}
+
+archive: Session archive\n(operator keeps) {
+  shape: document
+  style: {
+    fill: "#F3E8FF"
+    stroke: "#581C87"
+    bold: true
+  }
+}
+
+note_forks: |md
+  - Client isolation, signed
+  - Certificate of Destruction,
+  - compliance mappings live
+  - in forks (Voyageur).
+| {
+  shape: text
+  style.italic: true
+}
+
+start -> operate: session open
+operate -> close: work complete
+close -> archive: operator keeps
+
+start.phases -> operate.actions: {style.stroke-dash: 3; style.opacity: 0.4}
+operate.actions -> close.phases: {style.stroke-dash: 3; style.opacity: 0.4}

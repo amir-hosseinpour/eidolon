@@ -1,0 +1,92 @@
+direction: right
+
+title: {
+  label: "Eidolon, agent orchestration"
+  near: top-center
+  shape: text
+  style.font-size: 26
+  style.bold: true
+}
+
+operator: Operator (laptop) {
+  style.fill: "#F3F4F6"
+
+  main: Claude Code main session {
+    shape: rectangle
+    style.fill: "#E5E7EB"
+  }
+
+  subagents: Subagents (session-isolated) {
+    shape: rectangle
+    style.fill: "#FFFFFF"
+    style.stroke-dash: 3
+
+    cracker_a: cracker-agent {style.fill: "#FECACA"}
+    recon_a: recon-agent {style.fill: "#FDE68A"}
+    analyst_a: analyst-agent {style.fill: "#FED7AA"}
+    sandbox_a: sandbox-agent {style.fill: "#BBF7D0"}
+    report_a: report-agent {style.fill: "#BFDBFE"}
+  }
+
+  main -> subagents: /agent <name>
+}
+
+gateway: Gateway (orchestrator) {
+  shape: rectangle
+  style: {
+    fill: "#DBEAFE"
+    stroke: "#1E3A8A"
+    bold: true
+    stroke-width: 3
+  }
+
+  hmac: Scope-token HMAC\nvalidate
+  eng_check: Session\nopen check
+  tier: Command-tier\ncheck
+  dispatch: Dispatch to VM\njob server
+
+  hmac -> eng_check
+  eng_check -> tier
+  tier -> dispatch
+}
+
+vms: VM job servers (FastAPI, mTLS) {
+  shape: rectangle
+  style.fill: "#F9FAFB"
+
+  cracker_vm: cracker VM {style.fill: "#FECACA"}
+  recon_vm: recon VM {style.fill: "#FDE68A"}
+  analyst_vm: llm-analyst VM {style.fill: "#FED7AA"}
+  sandbox_vm: sandbox VM {style.fill: "#BBF7D0"}
+}
+
+logger: Logger VM {
+  shape: rectangle
+  style: {
+    fill: "#BFDBFE"
+    stroke: "#1E3A8A"
+  }
+  note: |md
+    - rsyslog TLS
+    - chattr +a
+    - Append only
+|
+}
+
+operator.subagents -> gateway.hmac: HTTPS + scope token\n(via eidolon CLI)
+gateway.dispatch -> vms.cracker_vm
+gateway.dispatch -> vms.recon_vm
+gateway.dispatch -> vms.analyst_vm
+gateway.dispatch -> vms.sandbox_vm
+
+gateway -> logger: audit event
+vms -> logger: audit event
+
+tiers: Command tiers {
+  near: bottom-center
+  shape: rectangle
+  style.fill: "#FFFFFF"
+  autonomous: autonomous\n(no prompt) {style.fill: "#BBF7D0"}
+  confirm: confirm\n(human gate) {style.fill: "#FDE68A"}
+  prohibited: prohibited\n(refused at gateway) {style.fill: "#FECACA"}
+}

@@ -1,0 +1,103 @@
+direction: right
+
+title: {
+  label: "Eidolon, provider router (LiteLLM)"
+  near: top-center
+  shape: text
+  style.font-size: 26
+  style.bold: true
+}
+
+agents: Eidolon runtime agents {
+  shape: rectangle
+  style.fill: "#F3F4F6"
+
+  plan: planner alias
+  off: offensive alias
+  sec: sec-qa alias
+  code: coder alias
+}
+
+router: LiteLLM router (sidecar) {
+  shape: rectangle
+  style: {
+    fill: "#FEF3C7"
+    stroke: "#B45309"
+    bold: true
+    stroke-width: 2
+  }
+  desc: |md
+    - OpenAI-compat endpoint
+    - API-key auth
+    - Cost per engagement
+    - Retry + fallback chains
+|
+}
+
+gemini: Google Gemini {
+  shape: cloud
+  style: {
+    fill: "#F3E8FF"
+    stroke: "#6B21A8"
+  }
+  pro: gemini-2.5-pro\n(planner)
+  flash: gemini-2.5-flash\n(planner-fast)
+}
+
+analyst: LLM Analyst VM {
+  shape: rectangle
+  style: {
+    fill: "#FED7AA"
+    stroke: "#9A3412"
+  }
+
+  llama: llama.cpp server\n(OpenAI-compat) {
+    shape: rectangle
+    style.fill: "#FFEDD5"
+  }
+  wrn: WhiteRabbitNeo-2.5-7B {style.fill: "#FECACA"}
+  fsec: Foundation-Sec-8B {style.fill: "#FED7AA"}
+  qwen: Qwen2.5-Coder-14B {style.fill: "#FDE68A"}
+
+  llama -> wrn
+  llama -> fsec
+  llama -> qwen
+}
+
+anthropic: Anthropic API {
+  shape: cloud
+  style: {
+    fill: "#FEE2E2"
+    stroke: "#991B1B"
+    stroke-dash: 4
+  }
+  note: |md
+    - NOT called from runtime.
+    - Consumer sub = operator's
+    - interactive Claude Code
+    - only.
+|
+}
+
+agents.plan -> router: chat.completions
+agents.off -> router: chat.completions
+agents.sec -> router: chat.completions
+agents.code -> router: chat.completions
+
+router -> gemini.pro: planner
+router -> gemini.flash: planner-fast
+router -> analyst.llama: offensive / sec-qa / coder
+
+router -> anthropic: {
+  style.stroke-dash: 4
+  style.stroke: "#991B1B"
+  label: "forbidden"
+}
+
+fallback: Fallback chain {
+  near: bottom-center
+  shape: rectangle
+  style.fill: "#FFFFFF"
+  f1: planner -> planner-fast -> coder
+  f2: offensive -> sec-qa
+}

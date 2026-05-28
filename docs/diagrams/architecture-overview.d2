@@ -1,0 +1,165 @@
+direction: right
+
+title: {
+  label: "Eidolon, architecture overview"
+  near: top-center
+  shape: text
+  style.font-size: 28
+  style.bold: true
+}
+
+operator: Operator workstation (laptop) {
+  shape: rectangle
+  style: {
+    fill: "#F3F4F6"
+    stroke: "#111827"
+    stroke-width: 2
+    border-radius: 8
+  }
+
+  cc: Claude Code\n(consumer sub, interactive only) {
+    shape: rectangle
+    style.fill: "#E5E7EB"
+  }
+  cli: eidolon CLI {
+    shape: rectangle
+    style.fill: "#E5E7EB"
+  }
+  wg: WireGuard + mTLS {
+    shape: rectangle
+    style.fill: "#DBEAFE"
+  }
+
+  cc -> cli
+  cli -> wg
+}
+
+host: Proxmox VE 8+ host {
+  shape: rectangle
+  style: {
+    fill: "#F9FAFB"
+    stroke: "#111827"
+    stroke-width: 2
+    border-radius: 8
+  }
+
+  orch: Orchestrator {
+    shape: rectangle
+    style: {
+      fill: "#DBEAFE"
+      stroke: "#1D4ED8"
+      bold: true
+    }
+    desc: |md
+      - FastAPI
+      - Scope-token HMAC
+      - Session lifecycle
+      - Command-tier gating
+|
+  }
+
+  router: LiteLLM router {
+    shape: rectangle
+    style: {
+      fill: "#FEF3C7"
+      stroke: "#B45309"
+    }
+    desc: |md
+      - OpenAI-compat endpoint
+      - Cost per session
+      - Retry + fallback
+|
+  }
+
+  vms: Role VMs {
+    shape: rectangle
+    style: {
+      fill: "#FFFFFF"
+      stroke: "#111827"
+    }
+
+    cracker: Cracker {
+      style.fill: "#FECACA"
+      desc: |md
+        - hashcat 6.2.6
+        - CrackQ REST
+        - RX 7600 XT
+|
+    }
+    analyst: LLM Analyst {
+      style.fill: "#FED7AA"
+      desc: |md
+        - llama.cpp
+        - WhiteRabbitNeo
+        - Foundation-Sec-8B
+        - Qwen-Coder
+|
+    }
+    recon: Recon {
+      style.fill: "#FDE68A"
+      desc: |md
+        - Kali base
+        - nmap / nuclei / burp
+        - MCP bridge
+|
+    }
+    sandbox: Sandbox {
+      style.fill: "#BBF7D0"
+      desc: |md
+        - Scratch workspace
+        - Per session
+        - Cleaned on close
+|
+    }
+    logger: Logger {
+      style.fill: "#BFDBFE"
+      desc: |md
+        - rsyslog TLS
+        - chattr +a
+        - Append only
+|
+    }
+  }
+
+  orch -> router: model calls
+  orch -> vms.cracker: mTLS + scope
+  orch -> vms.recon: mTLS + scope
+  orch -> vms.sandbox: mTLS + scope
+  orch -> vms.logger: audit writes
+  router -> vms.analyst: local inference
+  router -> gemini: commercial plan
+}
+
+gemini: Google Gemini\n(planner, vision) {
+  shape: cloud
+  style.fill: "#F3E8FF"
+  style.stroke: "#6B21A8"
+}
+
+target: Session scope\n(declared in scope.json) {
+  shape: cloud
+  style.fill: "#FEE2E2"
+  style.stroke: "#991B1B"
+}
+
+operator.wg -> host.orch: scope-token\n+ mTLS
+host.vms.recon -> target: scoped\negress only
+
+legend: Legend {
+  near: bottom-center
+  shape: rectangle
+  style: {
+    fill: "#FFFFFF"
+    stroke: "#9CA3AF"
+    stroke-dash: 3
+  }
+  note1: Operator laptop runs only interactive Claude Code. Session artifacts stay on the sandbox VM. {
+    shape: text
+  }
+  note2: Runtime LLM calls route through LiteLLM. Anthropic is never called from the runtime path. {
+    shape: text
+  }
+  note3: Firm grade features (client isolation, CoD, compliance) live in forks like Voyageur. {
+    shape: text
+  }
+}

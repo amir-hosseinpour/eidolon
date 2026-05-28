@@ -1,0 +1,61 @@
+name: ad-recon-single
+version: "1.0"
+description: >
+  Single-VM Active Directory recon workspace on Proxmox. Clones a
+  pre-built Kali Proxmox template (operator must prepare offline, default
+  template id 9000), attaches it to a per-engagement VLAN, and exposes the
+  standard AD recon toolchain (impacket, bloodhound-python, kerbrute,
+  rubeus, certipy, ldapdomaindump). Use against an isolated lab AD or
+  with explicit authorization.
+
+substrate_support: [proxmox]
+
+network:
+  name: "eng-{{engagement_id}}"
+  # CIDR is informational on Proxmox; the actual VLAN id is allocated by
+  # the substrate driver from PROXMOX_VLAN_POOL_START..PROXMOX_VLAN_POOL_END.
+  cidr: 10.44.0.0/24
+
+vms:
+  - name: kali-ad
+    # The "image" on Proxmox is the template ID to clone from. Operator
+    # prepares this template offline (Kali rolling + impacket + nxc + bh).
+    image: "9000"
+    cpu: 4
+    memory_mb: 8192
+    env:
+      LANG: C.UTF-8
+      ENGAGEMENT_TIER: ad_recon
+
+secrets_required:
+  # JSON file: {"domain": "...", "username": "...", "password": "..."}
+  # OR: {"domain": "...", "username": "...", "nthash": "..."}
+  - ad_credentials
+  # Optional: KRB5 conf for the target domain.
+  - krb5_conf
+
+decision_forks:
+  - type: scope_edge
+    auto_resolve: false
+    default_message: >
+      Operator review required before targeting hosts, domains, or trusts
+      not in the declared scope.
+  - type: noise_threshold
+    auto_resolve: false
+    default_message: >
+      Operator review required before queries likely to trigger AD logging
+      (full SPN sweep, kerberoast on every account, mass LDAP enum).
+  - type: cred_disposition
+    auto_resolve: false
+    default_message: >
+      Operator review required before storing or relaying recovered
+      credentials, hashes, or tickets beyond the engagement workspace.
+  - type: mode_change
+    auto_resolve: false
+    default_message: >
+      Operator review required before transitioning from passive recon
+      (ldap reads, DNS, port scan) to active operations (AS-REP roast,
+      kerberoast extraction, password spray, DCSync).
+
+scripts:
+  bootstrap: scripts/bootstrap.sh

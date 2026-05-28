@@ -1,0 +1,41 @@
+name: blank-kali
+version: "1.0"
+description: >
+  Bare Kali Linux rolling container. Single VM, no preinstalled tooling beyond
+  the upstream image. Use for ad-hoc work, learning, or as a starting point for
+  custom templates.
+
+substrate_support: [docker]
+
+network:
+  name: "eng-{{engagement_id}}"
+  cidr: 10.42.0.0/24
+
+vms:
+  - name: kali
+    image: kalilinux/kali-rolling:latest
+    cpu: 2
+    memory_mb: 4096
+    capabilities:
+      - NET_ADMIN
+      - NET_RAW
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      LANG: C.UTF-8
+
+secrets_required: []
+
+decision_forks:
+  - type: scope_edge
+    auto_resolve: false
+    default_message: >
+      Operator review required before targeting hosts outside the declared
+      engagement scope.
+  - type: noise_threshold
+    auto_resolve: false
+    default_message: >
+      Operator review required before running scans likely to produce loud
+      logs (e.g. full-port nmap, brute force).
+
+scripts:
+  bootstrap: scripts/bootstrap.sh
