@@ -5,15 +5,15 @@ Last updated: 2026-04-26
 
 ## 0. v0.1 scope cut (read first)
 
-v0.1 ships the **control plane only** — engagement-scoped scope tokens, three-tier command gate with operator co-sign, append-only hash-chained audit log, hybrid LLM router with redaction, and Certificate of Destruction attestation. v0.1 does **not** ship VMs. Operators bring their own runtime via the `HypervisorBackend` interface (Docker recipe in v0.1 docs; Proxmox / vSphere / libvirt in v0.2+). The six homelab VM roles previously planned for v0.1 (Engagement, Logger, Recon, Web, Internal, Wireless) move to Voyageur and to ROADMAP v0.2+. Rationale and prior-art comparison: ADR 0008.
+v0.1 ships the **control plane only** — engagement-scoped scope tokens, three-tier command gate with operator co-sign, append-only hash-chained audit log, hybrid LLM router with redaction, and Certificate of Destruction attestation. v0.1 does **not** ship VMs. Operators bring their own runtime via the `HypervisorBackend` interface (Docker recipe in v0.1 docs; Proxmox / vSphere / libvirt in v0.2+). The six homelab VM roles previously planned for v0.1 (Engagement, Logger, Recon, Web, Internal, Wireless) move to downstream forks and to ROADMAP v0.2+. Rationale and prior-art comparison: ADR 0008.
 
 ## 1. Vision
 
-The governance layer for AI-driven offensive security work. Runtime-agnostic. Open source under MIT. The hard problems Eidolon solves are: per-engagement identity binding, three-tier command authorization with operator co-sign at the prohibited tier, hash-chained audit attestation, redaction-aware hybrid LLM routing, and cryptographic-erase Certificate of Destruction. The runtime that actually executes commands is bring-your-own — Docker, Proxmox, vSphere, libvirt, bare metal, or a managed offering like Voyageur.
+The governance layer for AI-driven offensive security work. Runtime-agnostic. Open source under MIT. The hard problems Eidolon solves are: per-engagement identity binding, three-tier command authorization with operator co-sign at the prohibited tier, hash-chained audit attestation, redaction-aware hybrid LLM routing, and cryptographic-erase Certificate of Destruction. The runtime that actually executes commands is bring-your-own — Docker, Proxmox, vSphere, libvirt, bare metal, or a managed offering on top.
 
-Public release of v0.1 is targeted for DefCon Toronto in May 2026. The design and the docs are built to stand up to a room of working pentesters and researchers.
+The design and the docs are built to stand up to a room of working pentesters and researchers.
 
-Eidolon is a framework, not a platform. Firm-grade workflows (managed VMs, client isolation orchestration, compliance, multi-engagement, engagement memory, reports) live in proprietary forks layered on top. Voyageur is the canonical reference fork.
+Eidolon is a framework, not a platform. Firm-grade workflows (managed VMs, client isolation orchestration, compliance, multi-engagement, engagement memory, reports) live in proprietary forks layered on top. Downstream forks carry these.
 
 ## 2. Problem
 
@@ -30,7 +30,7 @@ Primary A: independent pentester running a home lab. Owns a Proxmox box already 
 
 Primary B: security researcher. Uses Eidolon as a lab for TTP validation, malware triage, exploit development, and offensive AI agent experiments against known vulnerable targets. Cares about reproducibility, observability, MCP tool integration.
 
-Secondary: pentest firm engineer. Forks Eidolon to build a firm internal platform with firm branding, client intake, compliance overlays, and evidence handling layered on top. Voyageur is the canonical example. The firm's work stays private, generic improvements flow back upstream.
+Secondary: pentest firm engineer. Forks Eidolon to build a firm internal platform with firm branding, client intake, compliance overlays, and evidence handling layered on top. Downstream forks carry these. The firm's work stays private, generic improvements flow back upstream.
 
 ## 4. Non goals
 
@@ -42,11 +42,11 @@ Not an exploit database. No CVE catalog, no Metasploit-style module registry. To
 
 Not a report-writing AI. Drafting is one capability behind the LLM router, not the product.
 
-Not a VM bundle. Eidolon v0.1 ships zero VMs. Operators wire their own runtime via the `HypervisorBackend` interface. Reference backends ship in v0.2+. Voyageur ships a managed Proxmox runtime as a commercial offering.
+Not a VM bundle. Eidolon v0.1 ships zero VMs. Operators wire their own runtime via the `HypervisorBackend` interface. Reference backends ship in v0.2+. Downstream forks ship a managed Proxmox runtime as a commercial offering.
 
 Not a compliance product. Eidolon emits the Certificate of Destruction (signed JSON anchored to audit head hashes) and the hash-chained audit trail; it does not map those to PIPEDA, SOC 2, or any specific regime. Compliance mappings live in firm forks.
 
-Not a multi-engagement platform in v0.1. One engagement at a time. Multi-engagement concurrency with bubble isolation is a Voyageur feature.
+Not a multi-engagement platform in v0.1. One engagement at a time. Multi-engagement concurrency with bubble isolation is a downstream forks feature.
 
 Not Windows host in v0.1. Operator runs on macOS or Linux. Windows support follows the codex-rs sandbox pattern in v0.4+.
 
@@ -76,7 +76,7 @@ Scope tokens are authorization only. They say what the agent can touch. They do 
 | Proxmox backend | v0.2 |
 | codex-rs Windows AppContainer sandbox backend | v0.4 |
 | macOS Virtualization.framework backend | v0.5 |
-| Six original homelab VM roles (Engagement, Logger, Recon, Web, Internal, Wireless) | Voyageur |
+| Six original homelab VM roles (Engagement, Logger, Recon, Web, Internal, Wireless) | downstream forks |
 
 ### 5.3 Agent orchestration
 
@@ -108,7 +108,7 @@ Scope tokens are authorization only. They say what the agent can touch. They do 
 | Daily rotation: chain segment closed at UTC midnight, Ed25519-signed, new segment continues prev_hash | P0 |
 | Logs accessible from the operator's CLI during and after the engagement | P0 |
 | Certificate of Destruction (signed JSON + stub PDF) embeds: engagement UUID, head hash at open, head hash at close, Ed25519 signature over both | P0 |
-| Real LUKS volume orchestration to back the Cert of Destruction | Voyageur |
+| Real LUKS volume orchestration to back the Cert of Destruction | downstream forks |
 | Mapping to PIPEDA / SOC 2 / PCI controls | Forks |
 
 ## 6. Non functional requirements
@@ -130,9 +130,9 @@ A crack job on a 100k hash NTLM file returns a status URL in under 2 seconds and
 
 Session close tears down workspace and archives logs in under 30 seconds.
 
-500 GitHub stars or 3 known production forks (Voyageur counts as one), whichever comes first.
+500 GitHub stars or 3 known production forks (downstream forks count), whichever comes first.
 
-A demo at DefCon Toronto May 2026 completes the kill chain (recon, crack, analyst summary) against a GOAD lab inside 10 minutes, live, without breaking.
+A v0.1 demo completes the kill chain (recon, crack, analyst summary) against a GOAD lab inside 10 minutes, live, without breaking.
 
 ## 8. Risks
 
@@ -142,15 +142,15 @@ A demo at DefCon Toronto May 2026 completes the kill chain (recon, crack, analys
 | Runtime AI provider changes ToS mid session | High | Model agnostic router is the invariant. Never hardcode a provider. |
 | Operator laptop compromised, research data exposed | Medium | Session data stays server side. Laptop only holds session state. FileVault required. |
 | Agent runs destructive commands against out of scope targets | High | Scope tokens plus per VM firewall rules. Tier 3 prohibited commands hard blocked at the FastAPI layer, not at the agent. |
-| Project loses maintainer interest | Medium | Hackable by design. ADRs. Fork friendly license. Voyageur and other known forks hedge single maintainer risk. |
+| Project loses maintainer interest | Medium | Hackable by design. ADRs. Fork friendly license. downstream forks hedge single maintainer risk. |
 | People mistake Eidolon for a compliance product | Medium | Docs are loud about the boundary. Forks handle compliance. |
 
 ## 9. Out of scope for v0.1
 
-Six homelab VMs (Engagement, Logger, Recon, Web, Internal, Wireless). BYO via `HypervisorBackend` or run Voyageur for managed.
-Real LUKS per-engagement volume orchestration and cryptographic erase. v0.1 emits the *attestation*; the volume itself is BYO. Voyageur ships managed LUKS.
-Proxmox SDN per-engagement VNETs. Voyageur ships managed networking.
-chattr +a Logger VM with TLS rsyslog. v0.1 uses POSIX append on local disk. Voyageur ships immutable Logger.
+Six homelab VMs (Engagement, Logger, Recon, Web, Internal, Wireless). BYO via `HypervisorBackend` or run downstream forks for managed.
+Real LUKS per-engagement volume orchestration and cryptographic erase. v0.1 emits the *attestation*; the volume itself is BYO. Downstream forks ship managed LUKS.
+Proxmox SDN per-engagement VNETs. Downstream forks ship managed networking.
+chattr +a Logger VM with TLS rsyslog. v0.1 uses POSIX append on local disk. Downstream forks ship immutable Logger.
 Multi-engagement concurrency, web UI, REPL. v0.1 is single engagement, CLI only.
 Engagement memory (persistent, queryable context across engagements). Forks.
 Log curation (noise stripping, evidence indexing). Forks.
@@ -167,6 +167,6 @@ Do we ship a reference hardware spec or leave operators to pick?
 
 How do we benchmark agent effectiveness across model backends? (See `docs/future/benchmarking.md`, TODO.)
 
-What is the minimum demo story for DefCon? (See `docs/presentations/defcon-toronto-2026-demo-plan.md`.)
+What is the minimum demo story for v0.1? (See `docs/release-v0.1-checklist.md`.)
 
 See [`ROADMAP.md`](ROADMAP.md) for release milestones and [`docs/adr/`](docs/adr/) for architectural decisions.

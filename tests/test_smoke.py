@@ -14,7 +14,7 @@ def _sample_scope() -> dict:
         "allowed_cidrs": ["10.10.0.0/16"],
         "allowed_actions": ["recon.read", "recon.active"],
         "tier": "autonomous",
-        "rules_of_engagement": "defcon demo",
+        "rules_of_engagement": "smoke test",
     }
 
 
@@ -22,7 +22,7 @@ def test_engagement_lifecycle(client: TestClient) -> None:
     resp = client.post(
         "/v1/engagements/start",
         json={
-            "slug": "defcon-demo",
+            "slug": "smoke-test",
             "purpose": "ctf",
             "scope": _sample_scope(),
         },

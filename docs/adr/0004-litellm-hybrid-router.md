@@ -37,7 +37,7 @@ Good:
 
 - Single endpoint for all agents.
 - Provider swap is a one line YAML edit.
-- Cost per session is trivial to surface. Forks (Voyageur) can ingest this into their own billing or reporting pipelines.
+- Cost per session is trivial to surface. Forks can ingest this into their own billing or reporting pipelines.
 - LiteLLM already handles retries, fallbacks, rate limits, API key rotation.
 
 Bad:
@@ -49,7 +49,7 @@ Bad:
 
 Hand rolled router. Rejected. Reinvents retry, fallback, cost tracking, key rotation. Not our value add.
 
-OpenRouter SaaS. Rejected. Eidolon is on prem, no SaaS runtime. Forks with firm grade data handling concerns (Voyageur) also cannot route data through an unapproved third party.
+OpenRouter SaaS. Rejected. Eidolon is on prem, no SaaS runtime. Forks with firm grade data handling concerns (downstream forks) also cannot route data through an unapproved third party.
 
 Portkey. Rejected. Less mature OpenAI compatible endpoint, smaller ecosystem, more SaaS leaning.
 

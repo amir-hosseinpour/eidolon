@@ -20,7 +20,7 @@ Security sensitive changes (anything under `orchestrator/`, `vms/*/security/`, o
 
 No GPL code in the runtime path. GPL inside target VMs for tools (Kali included) is fine. GPL in the orchestrator or router is not.
 
-Do not add firm grade features (client isolation, signed Certificate of Destruction, multi session concurrency, engagement memory, compliance mappings) to Eidolon. Those belong in forks. Voyageur is the canonical reference fork.
+Do not add firm grade features (client isolation, signed Certificate of Destruction, multi session concurrency, engagement memory, compliance mappings) to Eidolon. Those belong in forks. Downstream forks carry these.
 
 ## Development setup
 
@@ -69,4 +69,4 @@ Submitting a PR means your contribution lands under the same MIT license as the 
 
 ## Fork policy
 
-Eidolon is built to be forked. Firm specific forks (Voyageur, White Tuque's in house fork, is the canonical one) are expected and welcome. Downstream forks do not need to publish their changes. You are not required to contribute back. Upstream improvements to shared components (orchestrator, scope token logic, LiteLLM router config) are still welcome.
+Eidolon is built to be forked. Firm specific downstream forks are expected and welcome. They do not need to publish their changes. You are not required to contribute back. Upstream improvements to shared components (orchestrator, scope token logic, LiteLLM router config) are still welcome.

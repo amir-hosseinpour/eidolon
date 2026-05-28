@@ -13,4 +13,4 @@ Default roster:
 - `report-agent.md` — draft findings from signed log extracts
 
 Eidolon subagents run one session at a time. Firm grade multi engagement
-orchestration and engagement memory tooling live in Voyageur.
+orchestration and engagement memory tooling live in downstream forks.

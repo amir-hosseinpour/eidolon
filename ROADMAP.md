@@ -5,7 +5,7 @@ Last updated: 2026-04-26
 
 ## v0.1 = control plane only (BYO VM)
 
-v0.1 ships the governance layer for AI-driven offensive security work. Zero VMs. Operators wire their own runtime via the `HypervisorBackend` interface. Rationale: ADR 0008. The six homelab VMs originally planned for v0.1 (Engagement, Logger, Recon, Web, Internal, Wireless) move to Voyageur and to v0.2+ reference backends.
+v0.1 ships the governance layer for AI-driven offensive security work. Zero VMs. Operators wire their own runtime via the `HypervisorBackend` interface. Rationale: ADR 0008. The six homelab VMs originally planned for v0.1 (Engagement, Logger, Recon, Web, Internal, Wireless) move to downstream forks and to v0.2+ reference backends.
 
 ## Release cadence
 
@@ -15,7 +15,7 @@ v0.x. Alpha. Not production ready. Breaking changes expected.
 v1.0. Stable engagement lifecycle and governance surface. Safe for independent pentesters and researchers running their own work.
 v2.0. Paperclip orchestrator research surface. Autonomous agent loops as a first-class option.
 
-## v0.1 MVP (target: DefCon Toronto, May 2026)
+## v0.1 MVP
 
 Theme: control plane end-to-end against a no-op runtime backend. One engagement, one operator, every governance primitive proven.
 
@@ -31,7 +31,7 @@ Theme: control plane end-to-end against a no-op runtime backend. One engagement,
 - [ ] `HypervisorBackend` interface defined; `NoOpBackend` stub implemented and used in tests
 - [ ] BYO Docker recipe in `docs/runbooks/byo-docker.md`
 - [ ] End-to-end smoke test (`tests/test_end_to_end_engagement.py`, 8 steps)
-- [ ] DefCon Toronto demo dress-rehearsal recording (5 min, against `NoOpBackend`)
+- [ ] Demo dress-rehearsal recording (5 min, against `NoOpBackend`)
 - [ ] Tag `v0.1.0` with release notes citing PentAGI and Microsoft AGT as adjacent prior art
 
 Exit criteria: `make verify` passes, end-to-end smoke test passes, demo dress-rehearsal recording exists, release notes published.
@@ -52,7 +52,7 @@ Exit criteria: `make verify` passes, end-to-end smoke test passes, demo dress-re
 - [ ] Upgrade runbook from v0.x to v1.0
 - [ ] 90 day support commitment on the v1.0 branch
 
-Exit criteria: 500 GitHub stars or 3 known production forks (Voyageur counts as one), whichever comes first.
+Exit criteria: 500 GitHub stars or 3 known production forks (downstream forks count), whichever comes first.
 
 ## v2.0 Paperclip orchestrator (research phase)
 
@@ -101,7 +101,7 @@ No closed-source components.
 No mandatory telemetry to any third-party service.
 No integration that requires a SaaS signup to use Eidolon.
 No hard dependency on any single AI provider at runtime.
-No managed VM provisioning in Eidolon core. Voyageur ships managed runtime as a commercial offering.
-No client-engagement platform features beyond what governance demands. Multi-engagement concurrency, engagement memory, compliance mappings, branded reports belong to forks. **The Cert of Destruction attestation IS in scope** (signed JSON anchored to audit head hashes); the LUKS volume orchestration backing it is BYO or Voyageur.
+No managed VM provisioning in Eidolon core. Downstream forks ship managed runtime as a commercial offering.
+No client-engagement platform features beyond what governance demands. Multi-engagement concurrency, engagement memory, compliance mappings, branded reports belong to forks. **The Cert of Destruction attestation IS in scope** (signed JSON anchored to audit head hashes); the LUKS volume orchestration backing it is BYO or downstream forks.
 
 See [`PRD.md`](PRD.md) for product requirements. Each release gets a tagged milestone with tracked issues.

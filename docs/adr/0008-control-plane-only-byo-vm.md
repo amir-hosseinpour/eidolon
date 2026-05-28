@@ -33,7 +33,7 @@ In scope for v0.1:
 
 Out of scope for v0.1:
 
-- The six homelab VMs (Engagement, Logger, Recon, Web, Internal, Wireless). Move to Voyageur.
+- The six homelab VMs (Engagement, Logger, Recon, Web, Internal, Wireless). Move to downstream forks.
 - Real LUKS volume orchestration and cryptographic erase. v0.1 emits the *attestation* only — the volume itself is BYO.
 - Proxmox SDN per-engagement VNETs. BYO networking.
 - chattr +a Logger VM with TLS rsyslog. v0.1 uses POSIX append on local disk.
@@ -47,12 +47,11 @@ Good:
 - Open-source positioning is sharper. "Governance layer for AI-driven offensive work, runtime-agnostic" is defensible and not duplicated elsewhere. "Another Proxmox pentest VM bundle" is duplicated by every homelab on GitHub.
 - BYO VM removes adoption friction. Anyone with a Docker host, a Proxmox cluster, a vSphere DC, or just a laptop can adopt Eidolon. They wire their own backend later.
 - The hard problems get attention. Operator-identity model, redaction reliability, audit hash chain — these are where Eidolon either succeeds or fails as a product. No engineering oxygen wasted on Packer templates.
-- Voyageur gets a clearer commercial wedge. White Tuque ships Eidolon + managed VM provisioning + firm SOPs as a vertically integrated package. The open core stays open; the integration value stays proprietary.
 
 Bad:
 
 - "Where do I run my pentest?" question is now the operator's problem, not ours. Mitigation: a `docs/runbooks/byo-vm.md` recipe for the three most common runtimes (Docker, Proxmox, libvirt). Not v0.1 critical path; v0.1 ships with Docker recipe only.
-- Demo at DefCon Toronto requires a runtime to demo against. Mitigation: the dress-rehearsal recording uses the `HypervisorBackend` no-op stub so the demo proves the *control plane* end-to-end without depending on a runtime.
+- Demo at v0.1 release requires a runtime to demo against. Mitigation: the dress-rehearsal recording uses the `HypervisorBackend` no-op stub so the demo proves the *control plane* end-to-end without depending on a runtime.
 - Some early adopters who wanted "the whole bundle" will be disappointed. Mitigation: ROADMAP shows v0.3 ESXi backend, v0.4 Codex-style sandbox backend, v0.5 Hyper-V + macOS Virtualization.framework backends. The runtime story exists; it just isn't v0.1.
 
 ## Alternatives considered
@@ -69,6 +68,6 @@ Bad:
 
 - ROADMAP.md top section states "v0.1 = control plane only, BYO VM" and points here.
 - PRD.md out-of-scope lists the six VMs explicitly.
-- `vms/` directory is removed from the v0.1 cut. (Empty subdirs deleted; `vms/` itself moves to Voyageur or is deleted entirely.)
+- `vms/` directory is removed from the v0.1 cut. (Empty subdirs deleted; `vms/` itself moves to downstream forks or is deleted entirely.)
 - The `HypervisorBackend` interface is defined in v0.1 with a single stub implementation. Real backends are out-of-scope until v0.2.
 - Demo dress-rehearsal must run end-to-end against the stub backend. If it can't, v0.1 isn't done.

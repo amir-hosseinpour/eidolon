@@ -1,7 +1,7 @@
 # v0.1 release checklist
 
 Status: Draft
-Target: DefCon Toronto, May 2026
+Target: v0.1 release
 
 ## Must ship (no talk without these)
 
@@ -36,26 +36,26 @@ Target: DefCon Toronto, May 2026
 ### Core VMs
 
 - [ ] Cracker VM provisioning (`vms/cracker/`)
-  - [ ] `provision.sh` idempotent
-  - [ ] cloud-init for Ubuntu 24.04
-  - [ ] hashcat 6.2.6 OpenCL verified against the RX 7600 XT
-  - [ ] CrackQ REST API reachable from orchestrator
-  - [ ] 2 TB wordlist volume mounted read only
+ - [ ] `provision.sh` idempotent
+ - [ ] cloud-init for Ubuntu 24.04
+ - [ ] hashcat 6.2.6 OpenCL verified against the RX 7600 XT
+ - [ ] CrackQ REST API reachable from orchestrator
+ - [ ] 2 TB wordlist volume mounted read only
 - [ ] LLM Analyst VM provisioning (`vms/llm-analyst/`)
-  - [ ] llama.cpp server with OpenAI compat endpoint
-  - [ ] WhiteRabbitNeo 2.5 7B loaded and answering
-  - [ ] Foundation Sec 8B loaded and answering
-  - [ ] Latency target: first token under 500 ms on a 7B model
+ - [ ] llama.cpp server with OpenAI compat endpoint
+ - [ ] WhiteRabbitNeo 2.5 7B loaded and answering
+ - [ ] Foundation Sec 8B loaded and answering
+ - [ ] Latency target: first token under 500 ms on a 7B model
 - [ ] Recon VM provisioning (`vms/recon/`)
-  - [ ] Kali base image
-  - [ ] nmap, nuclei, burp, ffuf installed
-  - [ ] MCP bridge answering tool calls
+ - [ ] Kali base image
+ - [ ] nmap, nuclei, burp, ffuf installed
+ - [ ] MCP bridge answering tool calls
 - [ ] Sandbox VM provisioning (`vms/sandbox/`)
-  - [ ] Minimal Ubuntu 24.04
-  - [ ] Workspace volume scheme
+ - [ ] Minimal Ubuntu 24.04
+ - [ ] Workspace volume scheme
 - [ ] Logger VM provisioning (`vms/logger/`)
-  - [ ] rsyslog TLS endpoint on 6514
-  - [ ] Append only log directory with `chattr +a`
+ - [ ] rsyslog TLS endpoint on 6514
+ - [ ] Append only log directory with `chattr +a`
 
 ### Orchestrator
 
@@ -105,7 +105,7 @@ Target: DefCon Toronto, May 2026
 - [ ] Scope doc schema published with example
 - [ ] CHANGELOG.md with v0.1 notes
 
-## Can wait (post DefCon)
+## Can wait (post v0.1)
 
 - Tooling VM (v0.2)
 - Target Sim VM (v0.2)

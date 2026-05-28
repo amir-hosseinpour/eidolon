@@ -7,7 +7,7 @@ Last updated: 2026-04-20
 
 What Eidolon is trying to protect, who it assumes attacks it, and what lives outside its defenses.
 
-Eidolon is a framework for a single operator on a trusted Proxmox host. Firm grade threat models (multi client isolation, forensic grade audit, chain of custody) belong to forks like Voyageur and are not in scope here.
+Eidolon is a framework for a single operator on a trusted Proxmox host. Firm grade threat models (multi client isolation, forensic grade audit, chain of custody) belong to downstream forks and are not in scope here.
 
 ## Assets
 
@@ -52,13 +52,13 @@ Malicious target. Scope token bound to in scope IPs and CIDRs. Out of scope acti
 
 Compromised operator laptop. Session artifacts stay on the sandbox VM. The laptop holds session state only. FileVault required. Hardware keys (YubiKey for GPG, TouchID for WireGuard unlock) where the operator can run them.
 
-Upstream model provider. Operator controls what gets routed to commercial models via the LiteLLM config. Sessions that disallow egress route everything to the LLM Analyst VM and never touch a commercial endpoint. No automatic redaction layer ships in v0.1; that lands in Voyageur.
+Upstream model provider. Operator controls what gets routed to commercial models via the LiteLLM config. Sessions that disallow egress route everything to the LLM Analyst VM and never touch a commercial endpoint. No automatic redaction layer ships in v0.1; that lands in downstream forks.
 
 Supply chain. Pin dependency versions. Use signed releases where available. Monitor security advisories. Not a full defense.
 
 ## Out of scope threats
 
-These are real threats that Eidolon does not defend against. Forks that care about them (Voyageur) carry the defense.
+These are real threats that Eidolon does not defend against. Downstream forks that care about them carry the defense.
 
 - Multi client data separation. Eidolon runs one session at a time. Cross client leakage is not a scenario the framework considers.
 - Forensic grade audit. Eidolon logs are plain rsyslog over TLS. No GPG signing, no external append only mirror, no chain of custody artifact.

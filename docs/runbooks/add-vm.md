@@ -9,7 +9,7 @@ Use this when you want to add a new role specialized VM to Eidolon. Examples: a 
 
 Upstream. Generally useful to most operators (mobile pentest, cloud pentest). Ship a PR.
 
-Fork overlay. Firm specific (branded intake VM, proprietary CTI feed server). Ship it in Voyageur or your own fork.
+Fork overlay. Firm specific (branded intake VM, proprietary CTI feed server). Ship it in downstream forks or your own fork.
 
 The Eidolon base should stay thin. Default to fork overlay first. Upstream if the pattern is generic.
 
@@ -39,10 +39,10 @@ from eidolon.logging import audit_log
 
 @require_scope(session_required=True, allowed_tiers=["autonomous"])
 def run_my_tool(job_spec, scope_token):
-    audit_log(actor="my-tool-agent", action="run_my_tool", args=job_spec)
-    # actually run the tool
-    # write outputs to the session workspace only
-    return {"job_id": ..., "status": "running"}
+ audit_log(actor="my-tool-agent", action="run_my_tool", args=job_spec)
+ # actually run the tool
+ # write outputs to the session workspace only
+ return {"job_id": ..., "status": "running"}
 ```
 
 `require_scope` is the decorator that validates the scope token HMAC, checks the session is open, and checks the command tier.
@@ -56,7 +56,7 @@ from tools.my_tool import run_my_tool
 
 @app.post("/v1/my-tool")
 async def my_tool_endpoint(req: MyToolRequest, scope_token: str = Header(...)):
-    return run_my_tool(req.dict(), scope_token)
+ return run_my_tool(req.dict, scope_token)
 ```
 
 ## 4. Define the subagent (if applicable)
@@ -85,16 +85,16 @@ Instructions for the model...
 
 ```yaml
 <role>:
-  template: <role>-v0.1.qcow2
-  vnets: [mgmt, target]
-  default_specs:
-    vcpu: 2
-    ram: 4096
-    disk: 60
-  gpu_passthrough: false
-  job_server_url: http://<role>.eidolon.local:8080
-  tools:
-    - run_my_tool
+ template: <role>-v0.1.qcow2
+ vnets: [mgmt, target]
+ default_specs:
+ vcpu: 2
+ ram: 4096
+ disk: 60
+ gpu_passthrough: false
+ job_server_url: http://<role>.eidolon.local:8080
+ tools:
+ - run_my_tool
 ```
 
 ## 6. Test

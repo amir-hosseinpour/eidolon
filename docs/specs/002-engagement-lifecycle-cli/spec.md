@@ -4,10 +4,10 @@ Feature ID: 002-engagement-lifecycle-cli
 Status: Partially extracted (2026-04-26) — see [docs/BLUEPRINT-V0.1.md](../../BLUEPRINT-V0.1.md)
 Created: 2026-04-26
 
-> **Voyageur extraction note (2026-04-26):** The Certificate of Destruction
+> **downstream forks extraction note (2026-04-26):** The Certificate of Destruction
 > portion of this spec — Ed25519-signed cert generation on engagement erase,
 > the sign_cert/verify_cert helpers, and the cert response from the /erase
-> endpoint — was moved to the Voyageur fork. v0.1 Eidolon erase transitions
+> endpoint — was moved to the downstream forks fork. v0.1 Eidolon erase transitions
 > the engagement to status=erased and records audit_head_at_close, but does
 > not generate or sign a cert. The remainder of this spec (engagement
 > open/scope/close/erase REST shape, CLI surface, audit head capture) stays

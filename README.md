@@ -8,7 +8,7 @@ No SaaS. No vendor lock-in. No client dependency.
 
 ## Status
 
-v0.1-rc1. Public release lines up with my talk at DEFCON Toronto in May 2026. Working but young. Use it on lab targets, on engagements you own, on authorized work. Not battle-tested across hundreds of engagements yet.
+v0.1-rc1. Working but young. Use it on lab targets, on engagements you own, on authorized work. Not battle-tested across hundreds of engagements yet.
 
 ## Who this is for
 
@@ -16,7 +16,7 @@ If you're a solo pentester with a homelab, one Proxmox host and your laptop is e
 
 If you're a security researcher, it gives you a reproducible, observable, hackable environment for TTP validation, malware triage, exploit dev, or offensive-AI experiments against known-vulnerable targets.
 
-If you're a firm and you want an engine to fork, Eidolon is MIT-licensed and built for it. Layer your client intake, compliance overlays, and branded reports on top. Your firm-specific work stays private. Voyageur (White Tuque's in-house fork) is the canonical example.
+If you're a firm and you want an engine to fork, Eidolon is MIT-licensed and built for it. Layer your client intake, compliance overlays, and branded reports on top. Your firm-specific work stays private.
 
 ## What it is not
 
@@ -103,15 +103,7 @@ Full walkthrough: [`docs/runbooks/dogfood-web-app.md`](docs/runbooks/dogfood-web
 
 ## Forks
 
-Eidolon is built to be forked. Your firm-specific work layers on top without touching the core.
-
-Known forks:
-
-- Voyageur (URL TBD). White Tuque's in-house AI companion pentester. Adds client isolation, compliance, multi-engagement concurrency, engagement memory, branded reports.
-
-## Talks
-
-**DEFCON Toronto, May 2026.** *Local AI-driven offensive security: building a pentest and research environment on commodity hardware.* This is where Eidolon goes public.
+Eidolon is built to be forked. Your firm-specific work layers on top without touching the core. Client intake, compliance overlays, branded reports, client-isolation orchestration, signed Certificates of Destruction, multi-engagement concurrency, engagement memory: all of that lives in your fork, not upstream.
 
 ## Prior art
 

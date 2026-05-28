@@ -14,7 +14,7 @@ When an ADR and the constitution disagree, the more recent ADR wins and the cons
 v0.1 ships scope tokens, command-tier gating, audit hash chain, hybrid LLM router, and engagement lifecycle. v0.1 does not ship VMs, real LUKS orchestration, real SDN, or real immutable Logger. Operators bring their own runtime via the `HypervisorBackend` interface.
 
 - Origin: ADR 0008
-- Enforcement: PR review, plus the `tests/test_end_to_end_engagement.py` smoke test runs against `NoOpBackend` to prove the control plane is runtime-independent. Any spec adding VM provisioning code to Eidolon core is rejected and routed to Voyageur.
+- Enforcement: PR review, plus the `tests/test_end_to_end_engagement.py` smoke test runs against `NoOpBackend` to prove the control plane is runtime-independent. Any spec adding VM provisioning code to Eidolon core is rejected and routed to downstream forks.
 
 ### CON-2. No Anthropic endpoints in the runtime path
 
@@ -74,7 +74,7 @@ Engagement close emits a Cert of Destruction (signed JSON, plus stub PDF in v0.1
 
 ### CON-10. Eidolon is MIT-licensed and fork-friendly
 
-Code is MIT. Docs are CC BY 4.0. No GPL in the runtime path. Firm forks (Voyageur is the canonical example) are first-class downstream consumers with a stable API contract.
+Code is MIT. Docs are CC BY 4.0. No GPL in the runtime path. Firm forks (Downstream forks carry these.) are first-class downstream consumers with a stable API contract.
 
 - Origin: ADR 0001
 - Enforcement: License check in CI (forbid GPL in `pyproject.toml` dependencies). PR review.

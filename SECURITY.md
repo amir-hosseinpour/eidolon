@@ -8,10 +8,10 @@ To report:
 
 1. Open a private security advisory at the repo's [Security tab](https://github.com/amir-hosseinpour/eidolon/security/advisories/new). Do not email or open a public issue.
 2. Include:
-   - A description of the vulnerability.
-   - Steps to reproduce.
-   - Impact. What can an attacker do?
-   - Any suggested mitigation.
+ - A description of the vulnerability.
+ - Steps to reproduce.
+ - Impact. What can an attacker do?
+ - Any suggested mitigation.
 3. Expect acknowledgment within 72 hours.
 4. Expect a fix timeline: 14 days for critical, 30 days for high, 90 days for medium.
 
@@ -30,7 +30,7 @@ Out of scope:
 - Upstream tools (hashcat, nmap, burp, metasploit, sliver). Report those upstream.
 - Third party AI providers (Google Gemini, local model quantization bugs).
 - Operator misconfiguration (for example, running Eidolon on an unpatched host).
-- Firm grade concerns (client isolation, signed logs, Certificate of Destruction). Those live in forks (Voyageur). Report fork specific issues to the fork maintainer.
+- Firm grade concerns (client isolation, signed logs, Certificate of Destruction). Those live in forks. Report fork specific issues to the fork maintainer.
 
 ## Our commitments
 
@@ -70,5 +70,5 @@ Eidolon does not defend against:
 - An attacker who already owns the operator's Claude Code session with full workstation access.
 - Supply chain attacks on upstream tools (hashcat, etc.).
 - Flawed operator OPSEC (shared passwords, secrets in git).
-- Cross client data separation. Eidolon runs one session at a time. Forks (Voyageur) carry that defense.
-- Forensic recovery from disk. Eidolon does not do cryptographic erase. Forks (Voyageur) carry that.
+- Cross client data separation. Eidolon runs one session at a time. Forks carry that defense.
+- Forensic recovery from disk. Eidolon does not do cryptographic erase. Forks carry that.

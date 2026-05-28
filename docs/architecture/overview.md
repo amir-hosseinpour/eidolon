@@ -7,7 +7,7 @@ Last updated: 2026-04-20
 
 Eidolon is a self hosted, open source framework for offensive security work. A single operator drives sessions from a laptop running Claude Code. Heavy or specialized work runs on a Proxmox host as role specialized VMs. Model routing goes through LiteLLM, which fronts a commercial provider (Google Gemini by default, swap in OpenAI or Anthropic through a firm level agreement) for sessions that allow egress, and local models (WhiteRabbitNeo, Foundation Sec 8B, Qwen Coder) served by llama.cpp on an AMD GPU for sessions that do not. Anthropic's consumer Claude sub is used only for the operator's interactive Claude Code session, never at runtime inside a VM. That keeps us inside Consumer Terms 3.7.
 
-Eidolon does not ship client isolation, compliance artifacts, multi session concurrency, or engagement memory. Those are firm concerns, carried by forks like Voyageur.
+Eidolon does not ship client isolation, compliance artifacts, multi session concurrency, or engagement memory. Those are firm concerns, carried by downstream forks.
 
 ![Architecture overview](../diagrams/architecture-overview.svg)
 
@@ -15,37 +15,37 @@ Eidolon does not ship client isolation, compliance artifacts, multi session conc
 
 ```
 ┌───────────────────────────────┐
-│   Operator Workstation (Mac)  │
-│   - Claude Code (consumer)    │
-│   - eidolon CLI                │
-│   - WireGuard to host         │
+│ Operator Workstation (Mac) │
+│ - Claude Code (consumer) │
+│ - eidolon CLI │
+│ - WireGuard to host │
 └──────────────┬────────────────┘
-               │ mTLS + scope token
-               ▼
+ │ mTLS + scope token
+ ▼
 ┌───────────────────────────────────────────────────────────────┐
-│                    Proxmox VE 8+ Host                         │
-│                                                               │
-│  ┌──────────────────┐    ┌──────────────────────────────┐     │
-│  │ Orchestrator VM  │◄──►│       LiteLLM Router          │     │
-│  │ - FastAPI        │    │ - Gemini 2.5 Pro (plan/code) │     │
-│  │ - scope-token    │    │ - WhiteRabbitNeo (offensive) │     │
-│  │   HMAC           │    │ - Foundation-Sec-8B (sec QA) │     │
-│  │ - MCP bridges    │    │ - Qwen 2.5 Coder (tool calls)│     │
-│  └────────┬─────────┘    └──────────────────────────────┘     │
-│           │                                                   │
-│   ┌───────┼────────────────────┬──────────────┬────────────┐  │
-│   ▼       ▼                    ▼              ▼            ▼  │
+│ Proxmox VE 8+ Host │
+│ │
+│ ┌──────────────────┐ ┌──────────────────────────────┐ │
+│ │ Orchestrator VM │◄──►│ LiteLLM Router │ │
+│ │ - FastAPI │ │ - Gemini 2.5 Pro (plan/code) │ │
+│ │ - scope-token │ │ - WhiteRabbitNeo (offensive) │ │
+│ │ HMAC │ │ - Foundation-Sec-8B (sec QA) │ │
+│ │ - MCP bridges │ │ - Qwen 2.5 Coder (tool calls)│ │
+│ └────────┬─────────┘ └──────────────────────────────┘ │
+│ │ │
+│ ┌───────┼────────────────────┬──────────────┬────────────┐ │
+│ ▼ ▼ ▼ ▼ ▼ │
 │ ┌─────┐ ┌──────────┐ ┌──────────────┐ ┌────────────┐ ┌──────┐ │
-│ │Crack│ │ LLM-     │ │  Recon VM    │ │ Sandbox VM │ │Logger│ │
-│ │ VM  │ │ Analyst  │ │  - nmap      │ │ - scratch  │ │ VM   │ │
-│ │     │ │ VM       │ │  - nuclei    │ │   workspace│ │ -rsys│ │
-│ │-hash│ │-llama.cpp│ │  - burp      │ │ - per      │ │  log │ │
-│ │ cat │ │-ROCm/HIP │ │  - ffuf      │ │   session  │ │ TLS  │ │
-│ │-RX  │ │-Fnd-Sec  │ │  - MCP       │ │            │ │      │ │
-│ │7600 │ │-WRN-2.5  │ │    bridge    │ │            │ │      │ │
-│ │XT   │ │          │ │              │ │            │ │      │ │
+│ │Crack│ │ LLM- │ │ Recon VM │ │ Sandbox VM │ │Logger│ │
+│ │ VM │ │ Analyst │ │ - nmap │ │ - scratch │ │ VM │ │
+│ │ │ │ VM │ │ - nuclei │ │ workspace│ │ -rsys│ │
+│ │-hash│ │-llama.cpp│ │ - burp │ │ - per │ │ log │ │
+│ │ cat │ │-ROCm/HIP │ │ - ffuf │ │ session │ │ TLS │ │
+│ │-RX │ │-Fnd-Sec │ │ - MCP │ │ │ │ │ │
+│ │7600 │ │-WRN-2.5 │ │ bridge │ │ │ │ │ │
+│ │XT │ │ │ │ │ │ │ │ │ │
 │ └─────┘ └──────────┘ └──────────────┘ └────────────┘ └──────┘ │
-│                                                               │
+│ │
 └───────────────────────────────────────────────────────────────┘
 ```
 
@@ -136,7 +136,7 @@ Not a SaaS. Fully on prem. No telemetry.
 
 Not cloud first. Proxmox native. Cloud variants are post v1.
 
-Not a client engagement platform. No LUKS per engagement, no SDN isolation, no Certificate of Destruction, no compliance mappings. Forks (Voyageur) handle those.
+Not a client engagement platform. No LUKS per engagement, no SDN isolation, no Certificate of Destruction, no compliance mappings. Forks handle those.
 
 ## Related docs
 

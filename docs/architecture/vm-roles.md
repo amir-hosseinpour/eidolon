@@ -50,18 +50,18 @@ Specs:
 - OS: Ubuntu Server 24.04 LTS
 - vCPU: 8. RAM: 32 GB. Disk: 200 GB (models are big).
 - GPU: shares RX 7600 XT with cracker? No. See GPU strategy. 7600 XT stays dedicated to cracker.
-  - v0.1 LLM Analyst runs on CPU only, or on the Arc A380 via Vulkan (slower but fine for 7B models).
-  - After GPU upgrade: RTX PRO 6000 Blackwell (96 GB VRAM) dedicated to LLM Analyst.
+ - v0.1 LLM Analyst runs on CPU only, or on the Arc A380 via Vulkan (slower but fine for 7B models).
+ - After GPU upgrade: RTX PRO 6000 Blackwell (96 GB VRAM) dedicated to LLM Analyst.
 
 Stack:
 
 - `llama.cpp` server (HTTP mode, `server` binary), OpenAI compat
 - ROCm/HIP build on AMD. CUDA build on RTX PRO 6000. Vulkan fallback on Arc.
 - Models (GGUF, Q4_K_M or Q5_K_M depending on RAM):
-  - `WhiteRabbitNeo-2.5-7B`, security tuned, used when the session disallows egress or as a vendor independent fallback
-  - `Foundation-Sec-8B`, Cisco's security tuned Llama 3.1
-  - `Qwen2.5-Coder-14B`, tool calling, code
-  - Optional: `Llama-3.3-70B-Instruct-Q4` once the GPU upgrade lands
+ - `WhiteRabbitNeo-2.5-7B`, security tuned, used when the session disallows egress or as a vendor independent fallback
+ - `Foundation-Sec-8B`, Cisco's security tuned Llama 3.1
+ - `Qwen2.5-Coder-14B`, tool calling, code
+ - Optional: `Llama-3.3-70B-Instruct-Q4` once the GPU upgrade lands
 
 Interface:
 
@@ -123,7 +123,7 @@ Behavior:
 - Tool output, notes, and draft artifacts live here for the life of the session.
 - `eidolon session close` tears the workspace down. Anything the operator wants to keep gets archived out beforehand.
 
-Eidolon does not ship cryptographic erase, per session encrypted volumes, or forensic artifact handling. Firm forks (Voyageur) layer those on top.
+Eidolon does not ship cryptographic erase, per session encrypted volumes, or forensic artifact handling. Firm forks layer those on top.
 
 Agent: `sandbox-agent`
 
@@ -146,7 +146,7 @@ Stack:
 - Structured JSON log records with scope token hash, actor, target, command, exit status
 - Operator pulls session log excerpts from the CLI (`eidolon session logs`)
 
-Eidolon does not ship signed logs, GPG chain of custody, or forensic grade retention. Forks that need those (Voyageur) layer them on top.
+Eidolon does not ship signed logs, GPG chain of custody, or forensic grade retention. Forks that need those (downstream forks) layer them on top.
 
 Access pattern:
 

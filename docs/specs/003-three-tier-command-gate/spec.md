@@ -4,10 +4,10 @@ Feature ID: 003-three-tier-command-gate
 Status: Partially extracted (2026-04-26) — see [docs/BLUEPRINT-V0.1.md](../../BLUEPRINT-V0.1.md)
 Created: 2026-04-26
 
-> **Voyageur extraction note (2026-04-26):** The operator co-sign flow —
+> **downstream forks extraction note (2026-04-26):** The operator co-sign flow —
 > Ed25519-signed operator approvals, operators.json registry, the
 > /authorizations endpoints, the prohibited-tier "create AUTHZ then approve"
-> dance — was moved to the Voyageur fork. v0.1 Eidolon keeps the three-tier
+> dance — was moved to the downstream forks fork. v0.1 Eidolon keeps the three-tier
 > taxonomy on scope tokens (autonomous / confirm / prohibited): autonomous
 > dispatches go through, confirm-tier requires confirm_token header,
 > prohibited-tier hard-blocks with HTTP 403 tier_prohibited. There is no

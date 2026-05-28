@@ -118,7 +118,7 @@ Pre: AC text frozen above. Tests landed before implementation.
 ## Risks + mitigations
 
 - **Risk:** Header-based requester identity is spoofable. **Mitigation:** Spec 006 ticket queued in ROADMAP, doc'd in spec § Out of scope. Approver still needs the private key, so the worst-case (spoofed requester) doesn't bypass co-sign.
-- **Risk:** AuthzStore is process-local; restart loses pending authorizations. **Mitigation:** Acceptable for v0.1 (DefCon demo restarts pre-recorded). v0.2 SQLite migration covers it.
+- **Risk:** AuthzStore is process-local; restart loses pending authorizations. **Mitigation:** Acceptable for v0.1 (demo restarts pre-recorded). v0.2 SQLite migration covers it.
 - **Risk:** Test flake on `expires_at` boundary. **Mitigation:** Use `monkeypatch` on `time.time()` in tests, never rely on real clock.
 
 ## Constitution gate plan

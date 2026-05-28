@@ -10,13 +10,13 @@ Eidolon started as a fork of a personal Proxmox homelab scaffold that already ra
 Two concerns at the fork point:
 
 1. Should Eidolon start from scratch, or keep the homelab provisioning, networking, and observability as a base?
-2. How does Eidolon relate to firm specific forks (the canonical one is Voyageur for White Tuque)?
+2. How does Eidolon relate to firm specific downstream forks?
 
 ## Decision
 
-Fork the homelab blueprint. Strip all personal and gaming components. Keep the Proxmox, SDN, monitoring, and tooling scaffolds. Make Eidolon open source under MIT. Treat firm forks (Voyageur) as downstream, proprietary, and free to diverge.
+Fork the homelab blueprint. Strip all personal and gaming components. Keep the Proxmox, SDN, monitoring, and tooling scaffolds. Make Eidolon open source under MIT. Treat firm forks as downstream, proprietary, and free to diverge.
 
-Eidolon is the upstream. Voyageur is the downstream, tied to White Tuque. The relationship matches VS Code and Cursor. One open, one proprietary on top.
+Eidolon is the upstream. Firm specific forks are the downstream. The relationship matches VS Code and Cursor. One open, one proprietary on top.
 
 ## Consequences
 
@@ -24,7 +24,7 @@ Good:
 
 - Months of proven provisioning work transfers directly. SDN, monitoring, GPU handling, secrets layout.
 - Any operator with a homelab mindset can grok Eidolon quickly.
-- Firms that want proprietary tweaks (intake forms, branded reports, CTI feeds) fork Voyageur or roll their own without Eidolon core needing to care.
+- Firms that want proprietary tweaks (intake forms, branded reports, CTI feeds) maintain a downstream fork without Eidolon core needing to care.
 
 Bad:
 

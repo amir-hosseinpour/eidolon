@@ -82,7 +82,7 @@ Request:
   "permits": ["recon.active"],
   "tier": "confirm",
   "ttl_seconds": 28800,
-  "rules_of_engagement": "DefCon demo"
+  "rules_of_engagement": "smoke test"
 }
 ```
 

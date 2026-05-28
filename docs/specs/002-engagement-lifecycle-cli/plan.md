@@ -17,14 +17,14 @@ Replace the existing `eidolon session` Click group with `eidolon engagement`. Ad
 
 ```python
 class CertificateOfDestruction(BaseModel):
-    engagement_id: str
-    opened_at: int
-    closed_at: int
-    erased_at: int
-    audit_head_at_open: str   # hex sha256, "0" * 64 in v0.1 stub
-    audit_head_at_close: str  # ditto
-    public_key: str           # base64 Ed25519 pub key
-    signature: str            # base64 Ed25519 signature over canonical JSON of the above fields
+ engagement_id: str
+ opened_at: int
+ closed_at: int
+ erased_at: int
+ audit_head_at_open: str # hex sha256, "0" * 64 in v0.1 stub
+ audit_head_at_close: str # ditto
+ public_key: str # base64 Ed25519 pub key
+ signature: str # base64 Ed25519 signature over canonical JSON of the above fields
 ```
 
 Sign-over-canonical-json: `signature = ed25519_sign(canonical_json({fields_minus_signature, fields_minus_public_key}))`. Verification reproduces the canonical JSON and checks signature against `public_key`.
@@ -87,5 +87,5 @@ None. v0.2 migrates the in-memory store to SQLite.
 ## Out of scope (technical)
 
 - SQLite persistence (v0.2).
-- LUKS or actual volume erase (Voyageur).
+- LUKS or actual volume erase (downstream forks).
 - Cert verification CLI (Spec 004 ships `eidolon cert verify` because it needs the audit chain).

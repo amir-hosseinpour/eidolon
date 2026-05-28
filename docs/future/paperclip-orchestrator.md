@@ -9,7 +9,7 @@ Eidolon v0.1 through v1.0 assumes a human operator drives every session from Cla
 
 This is a research surface. Offensive AI agents are early. Eidolon ships the plumbing so researchers can try autonomous loops against safe targets (Target Sim VM, GOAD) without rewriting the orchestrator, scope token, or logging plane.
 
-Firm grade autonomous operation (multi engagement, proposal drafting, client communication, scheduled runs against production client scope) is not in Eidolon. That belongs to forks. Voyageur has its own Paperclip overlay.
+Firm grade autonomous operation (multi engagement, proposal drafting, client communication, scheduled runs against production client scope) is not in Eidolon. That belongs to forks. downstream forks has its own Paperclip overlay.
 
 ## Why the name Paperclip
 
@@ -53,20 +53,20 @@ Does not make exploit decisions that could legally or ethically be contested. Th
 
 ```
 ┌──────────────────────┐
-│   Paperclip runner   │  (separate VM or orchestrator container)
-│ - Task queue         │
-│ - Agent loop         │
-│ - Human gate CLI     │
+│ Paperclip runner │ (separate VM or orchestrator container)
+│ - Task queue │
+│ - Agent loop │
+│ - Human gate CLI │
 └──────────┬───────────┘
-           │
-           ▼
+ │
+ ▼
 ┌──────────────────────┐
-│   Eidolon Orchestrator│  (unchanged from v1.0)
+│ Eidolon Orchestrator│ (unchanged from v1.0)
 └──────────┬───────────┘
-           │
-    ┌──────┴─────────┐
-    ▼                ▼
-[ LiteLLM ]    [ VM job servers ]
+ │
+ ┌──────┴─────────┐
+ ▼ ▼
+[ LiteLLM ] [ VM job servers ]
 ```
 
 Paperclip is a client of the Eidolon orchestrator, same as Claude Code. It uses scope tokens the same way. It plays by the same rules.

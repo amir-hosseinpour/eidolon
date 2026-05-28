@@ -29,52 +29,52 @@ orchestrator that lets a real pentester (me) drive AI agents through real
 engagements without losing my mind to context pollution or permission spam.
 
 The compliance/governance flavor (Cert of Destruction, operator co-sign, SOC 2
-audit trail) belongs in **Voyageur** — White Tuque's proprietary fork. Not
+audit trail) belongs in **downstream forks**. Not
 covered here.
 
 ## Architecture overview
 
 ```
-+-------------------+         Tailscale / LAN          +----------------------+
-| Operator laptop   | <------ bearer token ----------> | Orchestrator host    |
-| (macOS, CC + skills)        + MCP                    | (Proxmox VM,         |
-|                   |                                  |  Linux/Docker, etc.) |
-| ~/.eidolon/                                          |                      |
-|   laptop.yaml     |                                  | $EIDOLON_HOME/       |
-| ~/.claude/skills/ |                                  |   state.db (SQLite)  |
-|   eidolon/        |                                  |   audit/             |
-|                   |                                  |   engagements/<id>/  |
-+-------------------+                                  |   templates/         |
-                                                       |   secrets/           |
-                                                       +----------------------+
-                                                              |
-                                                              | substrate driver
-                                                              v
-                                                       +----------------------+
-                                                       | VMs / containers     |
-                                                       | (Proxmox or Docker)  |
-                                                       | each runs eidolon-   |
-                                                       | agent for identity + |
-                                                       | secret broker proxy  |
-                                                       +----------------------+
++-------------------+ Tailscale / LAN +----------------------+
+| Operator laptop | <------ bearer token ----------> | Orchestrator host |
+| (macOS, CC + skills) + MCP | (Proxmox VM, |
+| | | Linux/Docker, etc.) |
+| ~/.eidolon/ | |
+| laptop.yaml | | $EIDOLON_HOME/ |
+| ~/.claude/skills/ | | state.db (SQLite) |
+| eidolon/ | | audit/ |
+| | | engagements/<id>/ |
++-------------------+ | templates/ |
+ | secrets/ |
+ +----------------------+
+ |
+ | substrate driver
+ v
+ +----------------------+
+ | VMs / containers |
+ | (Proxmox or Docker) |
+ | each runs eidolon- |
+ | agent for identity + |
+ | secret broker proxy |
+ +----------------------+
 ```
 
 Components, in plain words:
 
 - **Orchestrator** — FastAPI app on the host. Owns engagements, scope tokens,
-  audit log, fork stream, secrets broker, substrate calls. SQLite for state.
+ audit log, fork stream, secrets broker, substrate calls. SQLite for state.
 - **MCP server** — wraps the orchestrator's REST surface as MCP tools so any
-  MCP-aware AI client can use it. Lives next to the orchestrator on the host.
+ MCP-aware AI client can use it. Lives next to the orchestrator on the host.
 - **Laptop CLI + skills** — `eidolon` CLI plus three Claude Code skills that
-  give CC ergonomic wrappers over the MCP layer.
+ give CC ergonomic wrappers over the MCP layer.
 - **Substrate drivers** — `ProxmoxSubstrate`, `DockerSubstrate`. Each implements
-  a small ABC: `provision`, `snapshot`, `destroy`, `network_create`, etc.
+ a small ABC: `provision`, `snapshot`, `destroy`, `network_create`, etc.
 - **Templates** — directory-per-template with `template.yaml`, `scripts/`,
-  `skills/`, `workspace_skeleton/`, `README.md`. Three ship in v0.1:
-  `blank-kali`, `web-app-pentest`, `ad-recon-single`.
+ `skills/`, `workspace_skeleton/`, `README.md`. Three ship in v0.1:
+ `blank-kali`, `web-app-pentest`, `ad-recon-single`.
 - **VM agent** — small Python daemon `eidolon-agent` baked into template VMs.
-  Registers VM identity at boot, exposes localhost socket for in-VM tools to
-  request secrets. Heartbeats to orchestrator.
+ Registers VM identity at boot, exposes localhost socket for in-VM tools to
+ request secrets. Heartbeats to orchestrator.
 
 ## Decision-fork model
 
@@ -103,108 +103,108 @@ Both creation and resolution land in the audit chain.
 
 ```
 eidolon/
-  cli/
-    main.py                       # operator-facing CLI
-    orchestrator.py               # host-side: init, start, rotate-token
-    skills_install.py             # writes ~/.claude/skills/eidolon/
-  orchestrator/
-    app/
-      main.py                     # FastAPI app factory
-      dependencies.py             # bearer auth + DB session injection
-      routers/
-        engagements.py
-        tools.py                  # dispatch (kept from Spec 002)
-        forks.py                  # NEW: SSE stream + resolve
-        secrets.py                # NEW: broker REST
-        templates.py              # NEW: list/info templates
-        workspace.py              # NEW: read/append/replace engagement MD
-        health.py
-        # authorizations.py REMOVED (operator cosign moved to Voyageur)
-    lib/
-      audit.py                    # KEEP (Spec 004)
-      scope.py                    # KEEP (Spec 001)
-      engagements.py              # KEEP, strip cert generation
-      revocation.py               # KEEP
-      config.py                   # KEEP
-      keys.py                     # KEEP (JWT scope-token signing key)
-      state.py                    # NEW: SQLite layer (SQLAlchemy or stdlib)
-      forks.py                    # NEW: 5 fork types + lifecycle
-      templates.py                # NEW: template loader + validator
-      workspace.py                # NEW: engagement workspace MD I/O
-      secrets/
-        __init__.py
-        broker.py                 # NEW: scope tuple matching, audit hooks
-        keychain.py               # NEW: macOS Keychain driver
-        onepassword.py            # NEW: 1Password CLI driver
-      substrate/
-        __init__.py
-        base.py                   # NEW: ABC
-        proxmox.py                # NEW: pvesh / proxmoxer driver
-        docker.py                 # NEW: docker-py driver
-        # mac.py + windows.py = stubs raising NotImplementedError("v0.2")
-      # cert_of_destruction.py REMOVED (Voyageur)
-      # operators.py REMOVED (Voyageur)
-    mcp_servers/
-      __init__.py
-      server.py                   # NEW: MCP server wrapping REST surface
-      tools/                      # NEW: one file per MCP tool group
-    agents/                       # KEEP existing markdown stubs as starter docs
+ cli/
+ main.py # operator-facing CLI
+ orchestrator.py # host-side: init, start, rotate-token
+ skills_install.py # writes ~/.claude/skills/eidolon/
+ orchestrator/
+ app/
+ main.py # FastAPI app factory
+ dependencies.py # bearer auth + DB session injection
+ routers/
+ engagements.py
+ tools.py # dispatch (kept from Spec 002)
+ forks.py # NEW: SSE stream + resolve
+ secrets.py # NEW: broker REST
+ templates.py # NEW: list/info templates
+ workspace.py # NEW: read/append/replace engagement MD
+ health.py
+ # authorizations.py REMOVED (operator cosign moved to downstream forks)
+ lib/
+ audit.py # KEEP (Spec 004)
+ scope.py # KEEP (Spec 001)
+ engagements.py # KEEP, strip cert generation
+ revocation.py # KEEP
+ config.py # KEEP
+ keys.py # KEEP (JWT scope-token signing key)
+ state.py # NEW: SQLite layer (SQLAlchemy or stdlib)
+ forks.py # NEW: 5 fork types + lifecycle
+ templates.py # NEW: template loader + validator
+ workspace.py # NEW: engagement workspace MD I/O
+ secrets/
+ __init__.py
+ broker.py # NEW: scope tuple matching, audit hooks
+ keychain.py # NEW: macOS Keychain driver
+ onepassword.py # NEW: 1Password CLI driver
+ substrate/
+ __init__.py
+ base.py # NEW: ABC
+ proxmox.py # NEW: pvesh / proxmoxer driver
+ docker.py # NEW: docker-py driver
+ # mac.py + windows.py = stubs raising NotImplementedError("v0.2")
+ # cert_of_destruction.py REMOVED (downstream forks)
+ # operators.py REMOVED (downstream forks)
+ mcp_servers/
+ __init__.py
+ server.py # NEW: MCP server wrapping REST surface
+ tools/ # NEW: one file per MCP tool group
+ agents/ # KEEP existing markdown stubs as starter docs
 templates/
-  blank-kali/                     # NEW
-    template.yaml
-    scripts/provision.sh
-    workspace_skeleton/
-    README.md
-  web-app-pentest/                # NEW
-    template.yaml
-    scripts/{provision_kali.sh, juice_shop_compose.yaml}
-    skills/web-app-recon/
-    workspace_skeleton/
-    README.md
-  ad-recon-single/                # NEW (Proxmox-only)
-    template.yaml
-    scripts/{provision_dc.sh, provision_kali.sh, ad_seed.ps1}
-    skills/ad-recon/
-    workspace_skeleton/
-    README.md
-  # engagement-template/ EMPTY DIR REMOVED
-vm_agent/                          # NEW: separate Python package
-  eidolon_agent/
-    __init__.py
-    main.py                       # boots, registers identity, broker proxy
-    config.py
-  pyproject.toml
+ blank-kali/ # NEW
+ template.yaml
+ scripts/provision.sh
+ workspace_skeleton/
+ README.md
+ web-app-pentest/ # NEW
+ template.yaml
+ scripts/{provision_kali.sh, juice_shop_compose.yaml}
+ skills/web-app-recon/
+ workspace_skeleton/
+ README.md
+ ad-recon-single/ # NEW (Proxmox-only)
+ template.yaml
+ scripts/{provision_dc.sh, provision_kali.sh, ad_seed.ps1}
+ skills/ad-recon/
+ workspace_skeleton/
+ README.md
+ # engagement-template/ EMPTY DIR REMOVED
+vm_agent/ # NEW: separate Python package
+ eidolon_agent/
+ __init__.py
+ main.py # boots, registers identity, broker proxy
+ config.py
+ pyproject.toml
 docs/
-  BLUEPRINT-V0.1.md               # this file
-  concepts.md                     # NEW: workspace, fork, substrate, broker
-  templates.md                    # NEW: how to write templates
-  decision-forks.md               # NEW: 5 types deep dive
-  api.md                          # NEW: REST + MCP tool reference
-  constitution.md                 # KEEP
-  BUILD-PLAN-V0.1.md              # MARK SUPERSEDED, link to this file
-  specs/
-    001-scope-token-end-to-end/   # KEEP, polish notes
-    002-engagement-lifecycle-cli/ # KEEP, mark cert section moved-to-Voyageur
-    003-three-tier-command-gate/  # KEEP, mark cosign section moved-to-Voyageur
-    004-audit-log-hash-chain/     # KEEP unchanged
-    005-hybrid-llm-router-with-redaction/  # MARK deferred to v0.2
-    006-substrate-and-templates/  # NEW spec doc
-    007-decision-forks/           # NEW spec doc
-    008-secrets-broker/           # NEW spec doc
-    009-mcp-server/               # NEW spec doc
+ BLUEPRINT-V0.1.md # this file
+ concepts.md # NEW: workspace, fork, substrate, broker
+ templates.md # NEW: how to write templates
+ decision-forks.md # NEW: 5 types deep dive
+ api.md # NEW: REST + MCP tool reference
+ constitution.md # KEEP
+ BUILD-PLAN-V0.1.md # MARK SUPERSEDED, link to this file
+ specs/
+ 001-scope-token-end-to-end/ # KEEP, polish notes
+ 002-engagement-lifecycle-cli/ # KEEP, mark cert section moved-to-downstream forks
+ 003-three-tier-command-gate/ # KEEP, mark cosign section moved-to-downstream forks
+ 004-audit-log-hash-chain/ # KEEP unchanged
+ 005-hybrid-llm-router-with-redaction/ # MARK deferred to v0.2
+ 006-substrate-and-templates/ # NEW spec doc
+ 007-decision-forks/ # NEW spec doc
+ 008-secrets-broker/ # NEW spec doc
+ 009-mcp-server/ # NEW spec doc
 tests/
-  test_audit_chain.py             # KEEP
-  test_audit_cli.py               # KEEP
-  test_scope_token.py             # KEEP
-  test_engagement_*.py            # KEEP, drop cert/cosign assertions
-  test_state_db.py                # NEW
-  test_forks.py                   # NEW
-  test_substrate_docker.py        # NEW (uses real Docker, marked integration)
-  test_substrate_proxmox.py       # NEW (mocked or skipped without env)
-  test_secrets_keychain.py        # NEW (skipped on non-macOS)
-  test_templates_loader.py        # NEW
-  test_workspace.py               # NEW
-  test_mcp_server.py              # NEW
+ test_audit_chain.py # KEEP
+ test_audit_cli.py # KEEP
+ test_scope_token.py # KEEP
+ test_engagement_*.py # KEEP, drop cert/cosign assertions
+ test_state_db.py # NEW
+ test_forks.py # NEW
+ test_substrate_docker.py # NEW (uses real Docker, marked integration)
+ test_substrate_proxmox.py # NEW (mocked or skipped without env)
+ test_secrets_keychain.py # NEW (skipped on non-macOS)
+ test_templates_loader.py # NEW
+ test_workspace.py # NEW
+ test_mcp_server.py # NEW
 ```
 
 ## Existing-code triage (final)
@@ -214,12 +214,12 @@ tests/
 | `eidolon/orchestrator/lib/audit.py` | **Keep**. Spec 004 work, complete. |
 | `eidolon/orchestrator/lib/scope.py` | **Keep**. Spec 001 work, polish. |
 | `eidolon/orchestrator/lib/engagements.py` | **Keep**. Strip cert generation in `engagement_erase`; defer to substrate destroy + workspace archive. |
-| `eidolon/orchestrator/lib/cert_of_destruction.py` | **Move to Voyageur** before v0.1 ship. |
-| `eidolon/orchestrator/lib/operators.py` | **Move to Voyageur**. Operator Ed25519 co-sign is compliance feature. |
+| `eidolon/orchestrator/lib/cert_of_destruction.py` | **Move to downstream forks** before v0.1 ship. |
+| `eidolon/orchestrator/lib/operators.py` | **Move to downstream forks**. Operator Ed25519 co-sign is compliance feature. |
 | `eidolon/orchestrator/lib/revocation.py` | **Keep**. Scope token revocation is core. |
 | `eidolon/orchestrator/lib/keys.py` | **Keep**. JWT signing key for scope tokens. |
 | `eidolon/orchestrator/lib/config.py` | **Keep**. |
-| `eidolon/orchestrator/app/routers/authorizations.py` | **Move to Voyageur**. Operator co-sign endpoints. |
+| `eidolon/orchestrator/app/routers/authorizations.py` | **Move to downstream forks**. Operator co-sign endpoints. |
 | `eidolon/orchestrator/app/routers/engagements.py` | **Keep**. Drop cert response from `/erase`, drop authz endpoints. |
 | `eidolon/orchestrator/app/routers/tools.py` | **Keep**. Dispatch + tier gate stays. |
 | `eidolon/cli/main.py` | **Keep**. Drop `authz` group. Add `engage`, `fork`, `secrets`, `templates`, `orchestrator` groups. |
@@ -245,12 +245,12 @@ Both land in audit. Both observable from CLI. Don't conflate.
 ## v0.1 day-count plan
 
 Realistic per-day estimate based on me-with-AI productivity. Reverse-engineered
-from "ship before DefCon Toronto, but DefCon is sideline — real bar is
+from "ship before v0.1 release — real bar is
 dogfooding for a real engagement." Rough order ≈ dependency order.
 
 | Days | Task |
 |---|---|
-| 1 | Voyageur extraction: move cert, operators, authz endpoints; delete tests; verify CI green |
+| 1 | downstream forks extraction: move cert, operators, authz endpoints; delete tests; verify CI green |
 | 2 | SQLite state layer: schema, migrations, replace `EngagementStore`/`ScopeTokenStore`/`DispatchStore` with DB-backed |
 | 1 | Bearer token middleware: `Authorization: Bearer` on all routes except `/health`; `eidolon orchestrator init` generates token |
 | 2 | Substrate ABC + DockerSubstrate: provision, snapshot, destroy, network_create. Docker network = engagement isolation. |
@@ -278,7 +278,7 @@ dogfooding for a real engagement." Rough order ≈ dependency order.
 
 **Total: ~41 days of work.** Calendar = ~5 weeks ≈ 35 working days for me.
 **Implication: 6 days over.** First cuts if behind: `ad-recon-single` template
-(slip to v0.1.1 right after DefCon) and 1Password driver (Keychain only v0.1).
+(slip to v0.1.1) and 1Password driver (Keychain only v0.1).
 That trims 5 days. Second cut: defer dogfood-AD pass, demo only web-app workflow.
 
 ## Success bar (dogfood, not demo)
@@ -290,13 +290,13 @@ I should be able to run a real client web-app pentest entirely through Eidolon:
 - I edit `notes.md` directly with my own observations
 - 8 hours later, AI summarizes findings into `findings.md` from notes
 - `eidolon engage close <id>` (default archive) → VMs nuked, secrets revoked,
-  audit log clean, snapshot tar at `$EIDOLON_HOME/engagements/<id>/`
+ audit log clean, snapshot tar at `$EIDOLON_HOME/engagements/<id>/`
 - `eidolon audit verify` clean
 - I can come back two weeks later, unarchive, re-test with new scope token
 
 If that flow works on a real engagement (not just a demo target), v0.1 is done.
 
-## v0.2 roadmap (post-DefCon, not committed dates)
+## v0.2 roadmap (not committed dates)
 
 - Mac substrate (Lima or Tart)
 - Windows substrate (Hyper-V or WSL2)
@@ -304,16 +304,15 @@ If that flow works on a real engagement (not just a demo target), v0.1 is done.
 - Hybrid LLM router with PII/secrets redaction (Spec 005)
 - Additional templates: drone-pentest, ad-recon-concurrent, cloud-recon
 - TUI dashboard for engagement status (textual)
-- Voyageur public sibling repo (compliance overlay, depends on Eidolon)
 
 ## Open questions deferred to implementation time
 
 - SQLAlchemy vs stdlib `sqlite3`: lean stdlib unless ORM helps; revisit if joins
-  get painful.
+ get painful.
 - MCP server framework: `mcp` reference SDK vs hand-rolled. Probably reference
-  SDK; check for FastAPI integration story.
+ SDK; check for FastAPI integration story.
 - Secrets broker on Linux orchestrator host: `pass` (gpg) is simplest, Secret
-  Service requires D-Bus session.
+ Service requires D-Bus session.
 - Fork SSE keepalive interval: probably 15s, tune if reverse proxies kill idle.
 - Template validator strictness: schema-strict in v0.1, permit unknown keys for
-  forward compat? Lean strict-with-clear-error-messages.
+ forward compat? Lean strict-with-clear-error-messages.

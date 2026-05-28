@@ -139,7 +139,7 @@ The v2.0 Paperclip orchestrator is not a Claude Code subagent. It is a separate 
 
 ## Fork and firm customization
 
-Voyageur (White Tuque's fork) overrides only the subagent YAML and tool definitions. The orchestrator schema is stable. A firm can:
+downstream forks ('s fork) overrides only the subagent YAML and tool definitions. The orchestrator schema is stable. A firm can:
 
 - Rename agents
 - Add tools (firm specific wordlists, internal CTI feeds)
